@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Capture with Focus Score</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+        }
+        .content {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .video-container {
+            margin-bottom: 20px;
+        }
+        .score-container {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+        }
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Styles for Progress Bar */
+        #progress-container {
+            width: 100%;
+            background-color: #ddd;
+            margin-top: 20px;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 20px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 20px; /* Optional: for text inside the bar */
+            color: white; /* Optional: for text inside the bar */
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="header">Webcam Focus Score Tracker</div>
+    <div class="content">
+        <div class="video-container">
+            <video id="webcam" width="640" height="480" autoplay hidden></video>
+        </div>
+        <button id="startSess">Start Session</button>
+        <button id="stopSess">Stop Session</button>
+        <div class="score-container">
+            <span>Focus Score: </span><span id="focus-score">-</span>
+        </div>
+        <div id="progress-container" style="display: none;">
+            <div id="progress-bar" style="width: 0%; height: 20px; background-color: #4CAF50;"></div>
+        </div>
+    </div>
+    
+    <script src="static/script.js"></script>
+</body>
+</html>
