@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam Capture with Focus Score</title>
+    <title>Focus Score Tracker</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
@@ -34,6 +34,7 @@
             margin-top: 20px;
             font-size: 20px;
             color: #333;
+            margin-bottom: 20px;
         }
         button {
             padding: 10px 15px;
@@ -48,7 +49,7 @@
         button:hover {
             background-color: #0056b3;
         }
-        
+
         /* Styles for Progress Bar */
         #progress-container {
             width: 100%;
@@ -63,11 +64,53 @@
             line-height: 20px; /* Optional: for text inside the bar */
             color: white; /* Optional: for text inside the bar */
         }
-        
+        .focus-scale-container {
+            margin-top: 20px;
+            width: 80%;
+            margin: 0 auto;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .focus-scale-container h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .focus-scale-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .focus-scale-table thead th {
+            background-color:  #007bff; /* Background color of the title bar */
+            color: white;             /* Text color */
+            font-size: 16px;          /* Font size */
+        }
+        .focus-scale-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .focus-scale-table th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .focus-scale-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .focus-level-highlight {
+            background-color: #c8e6c9;
+        }
     </style>
 </head>
 <body>
-    <div class="header">Webcam Focus Score Tracker</div>
+    <div class="header">Focus Score Tracker</div>
     <div class="content">
         <div class="video-container">
             <video id="webcam" width="640" height="480" autoplay hidden></video>
@@ -79,6 +122,50 @@
         </div>
         <div id="progress-container" style="display: none;">
             <div id="progress-bar" style="width: 0%; height: 20px; background-color: #4CAF50;"></div>
+        </div>
+        <div>
+            <h2>Focus Scale for Dummies</h2>
+            <table class="focus-scale-table">
+                <thead>
+                    <tr>
+                        <th>Score</th>
+                        <th>Badge</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-score="0">
+                        <td><strong>0</strong></td>
+                        <td><strong> Professional Daydreamer </strong></td>
+                        <td>Your focus is on a permanent vacation. You're so unfocused, you might forget what focusing actually feels like.</td>
+                    </tr>
+                    <tr data-score="20">
+                        <td><strong>20</strong></td>
+                        <td><strong> Multitasker-in-Denial </strong></td>
+                        <td>You think you're focusing, but really, your brain is juggling thoughts like a clumsy clown.</td>
+                    </tr>
+                    <tr data-score="40">
+                        <td><strong>40</strong></td>
+                        <td><strong> Wannabe Zen Master </strong></td>
+                        <td>You're trying to focus, but your mind is like a wild monkey jumping from branch to branch.</td>
+                    </tr>
+                    <tr data-score="60">
+                        <td><strong>60</strong></td>
+                        <td><strong> Accidental Productive Human </strong></td>
+                        <td>You're surprisingly on track, but like a cat startled by a cucumber, any sudden distraction could send you off course.</td>
+                    </tr>
+                    <tr data-score="80">
+                        <td><strong>80</strong></td>
+                        <td><strong> Almost a Laser Beam </strong></td>
+                        <td>So close to real focus, you're practically a superhero, just one easily distracted by the next episode of your favorite show.</td>
+                    </tr>
+                    <tr data-score="100">
+                        <td><strong>100</strong></td>
+                        <td><strong> Unicorn-Level Focuser </strong></td>
+                        <td>A rare and mythical level of concentration, believed to exist only in legends and caffeine-fueled all-nighters.</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     

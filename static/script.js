@@ -2,6 +2,7 @@ const video = document.getElementById('webcam');
 let mediaRecorder;
 let videoChunks = [];
 let stream;
+let currentProcessID = null;
 
 // Function to start video stream
 function startVideoStream() {
@@ -31,6 +32,18 @@ function stopVideoStream() {
 
 document.getElementById('startSess').onclick = () => {
     startVideoStream();
+    // AJAX call to the backend start_processing endpoint
+    $.ajax({
+        type: 'POST',
+        url: '/start_processing',
+        success: function(response) {
+            console.log('Start processing:', response.message);
+            currentProcessID = response.processId;
+        },
+        error: function(error) {
+            console.error('Error starting session:', error);
+        }
+    });
 };
 
 document.getElementById('stopSess').onclick = () => {
@@ -38,12 +51,26 @@ document.getElementById('stopSess').onclick = () => {
         mediaRecorder.stop();
     }
     stopVideoStream();
+    // AJAX call to the backend stop_processing endpoint
+    $.ajax({
+        type: 'POST',
+        url: '/stop_processing',
+        data: JSON.stringify({ processId: currentProcessID }),
+        contentType: 'application/json',
+        success: function(response) {
+            console.log('Stop processing:', response.message);
+        },
+        error: function(error) {
+            console.error('Error stopping session:', error);
+        }
+    });
 };
 
 function sendVideoToServer() {
     const blob = new Blob(videoChunks, { type: 'video/webm' });
     const formData = new FormData();
     formData.append('video', blob);
+    formData.append('processId', currentProcessID); // Include the process ID
 
     $.ajax({
         type: 'POST',
@@ -70,6 +97,7 @@ function pollForFocusScore(processId) {
                 clearInterval(intervalId);
                 document.getElementById('progress-container').style.display = 'none';
                 updateFocusScore(data.focusScore);
+                highlightFocusLevel(data.focusScore)
             } else if (status === 'error') {
                 clearInterval(intervalId);
                 console.error('Error fetching focus score');
@@ -80,10 +108,29 @@ function pollForFocusScore(processId) {
             }
             // If still processing, continue polling
         });
-    }, 3000); // Poll every 3 seconds, adjust as necessary
+    }, 2000); // Poll every 3 seconds, adjust as necessary
 }
 
 function updateFocusScore(score) {
     document.getElementById('focus-score').textContent = score;
     document.getElementById('progress-container').style.display = 'none';
+}
+
+function highlightFocusLevel(decimalScore) {
+    // Round the decimal score to the nearest focus level
+    const standardScores = [0, 20, 40, 60, 80, 100];
+    let roundedScore = standardScores.reduce(function(prev, curr) {
+        return (Math.abs(curr - decimalScore) < Math.abs(prev - decimalScore) ? curr : prev);
+    });
+    console.log('roundedscore', roundedScore);
+    // Remove highlight from all levels
+    document.querySelectorAll('.focus-scale-table tr').forEach(tr => {
+        tr.classList.remove('focus-level-highlight');
+    });
+
+    // Highlight the rounded level
+    let currentLevel = document.querySelector(`.focus-scale-table tr[data-score='${roundedScore}']`);
+    if (currentLevel) {
+        currentLevel.classList.add('focus-level-highlight');
+    }
 }

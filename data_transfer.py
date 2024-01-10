@@ -20,7 +20,7 @@ background_color = "#fafafa" # white (material)
 
 class Sensor:
     #constructor
-    def __init__(self,address,sensor_type):
+    def __init__(self,address, sensor_type):
         self.address = address
         self.sensor_type = sensor_type
     
@@ -28,11 +28,9 @@ class Sensor:
     def on_message(self,ws, message):
         values = json.loads(message)['values']
         timestamp = json.loads(message)['timestamp']
-
         x_data.append(values[0])
         y_data.append(values[1])
         z_data.append(values[2])
-
         time_data.append(float(timestamp/1000000))
 
     def on_error(self,ws, error):
