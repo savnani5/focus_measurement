@@ -45,7 +45,7 @@ class FocusMeasurementApp:
         if process_id in self.focus_scores_video and process_id in self.focus_scores_sensor:
             score_vid = self.focus_scores_video.get(process_id)
             score_sensor = self.focus_scores_sensor.get(process_id)
-            score = round((score_vid+score_sensor)/2, 2)
+            score = round(((2*score_vid) + score_sensor)/3, 2)
             if score is not None:
                 return jsonify({'focusScore': score})
             else:
@@ -77,7 +77,7 @@ class FocusMeasurementApp:
         if sensor:
             sensor_data = sensor.data  # Assuming 'data' is an attribute of Sensor
             threading.Thread(target=self.process_sensor_data, args=(sensor_data, process_id)).start()
-            del self.sensors[process_id]  # Remove the sensor instance from the dictionary
+            # del self.sensors[process_id]  # Remove the sensor instance from the dictionary
             return jsonify({'message': 'Processing stopped for process ID: ' + process_id} )
         else:
             return jsonify({'error': 'Sensor not found for the given process ID'}), 404

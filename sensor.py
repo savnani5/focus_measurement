@@ -54,7 +54,7 @@ class Sensor:
         self.thread._Thread_stop()       
 
 
-def calculate_focus_score_sensor(data, process_id, threshold=0.5):
+def calculate_focus_score_sensor(data, process_id, threshold=0.1):
     print("Calculating Focus Score from Sensor data")
     csv_out = os.path.join("data", "sensor", f"user_{process_id}.csv")
     # Write data to csv

@@ -117,19 +117,20 @@ function updateFocusScore(score) {
 }
 
 function highlightFocusLevel(decimalScore) {
-    // Round the decimal score to the nearest focus level
-    const standardScores = [0, 20, 40, 60, 80, 100];
-    let roundedScore = standardScores.reduce(function(prev, curr) {
-        return (Math.abs(curr - decimalScore) < Math.abs(prev - decimalScore) ? curr : prev);
-    });
-    console.log('roundedscore', roundedScore);
-    // Remove highlight from all levels
-    document.querySelectorAll('.focus-scale-table tr').forEach(tr => {
-        tr.classList.remove('focus-level-highlight');
-    });
+    // Round the decimal score to the nearest multiple of 20
+    let roundedScore = Math.round(decimalScore / 20) * 20;
+    roundedScore = Math.max(0, Math.min(roundedScore, 100)); // Ensure it's within 0-100 range
+
+    console.log('roundedScore', roundedScore);
+
+    // // Remove highlight from all levels
+    // document.querySelectorAll('.focus-scale-table tr').forEach(tr => {
+    //     tr.classList.remove('focus-level-highlight');
+    // });
 
     // Highlight the rounded level
     let currentLevel = document.querySelector(`.focus-scale-table tr[data-score='${roundedScore}']`);
+    console.log('Current Level Element:', currentLevel);
     if (currentLevel) {
         currentLevel.classList.add('focus-level-highlight');
     }
